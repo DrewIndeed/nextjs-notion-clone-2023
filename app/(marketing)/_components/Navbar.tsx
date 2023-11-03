@@ -4,7 +4,7 @@ import { SignInButton } from "@clerk/nextjs";
 import { useConvexAuth } from "convex/react";
 
 import { Button } from "@/components/ui/button";
-import { ModeToggle } from "@/components/ui/mode-toggle";
+import ModeToggle from "@/components/manual/ModeToggle";
 import useScrollTop from "@/hooks/useScrollTop";
 import { cn } from "@/lib/utils";
 import Logo from "./Logo";
