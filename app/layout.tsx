@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import ConvexProvider from "@/components/providers/ConvexProvider";
 
 import "./globals.css";
 
@@ -35,15 +36,17 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider
-          enableSystem
-          disableTransitionOnChange
-          attribute="class"
-          defaultTheme="system"
-          storageKey="jotivate-2023"
-        >
-          {children}
-        </ThemeProvider>
+        <ConvexProvider>
+          <ThemeProvider
+            enableSystem
+            disableTransitionOnChange
+            attribute="class"
+            defaultTheme="system"
+            storageKey="jotivate-2023"
+          >
+            {children}
+          </ThemeProvider>
+        </ConvexProvider>
       </body>
     </html>
   );
