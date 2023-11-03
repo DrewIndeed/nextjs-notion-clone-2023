@@ -8,7 +8,13 @@ const Hero = () => {
           <Image
             fill
             src="/documents.png"
-            className="object-contain select-none pointer-events-none"
+            className="object-contain select-none pointer-events-none dark:hidden"
+            alt="documents"
+          />
+          <Image
+            fill
+            src="/documents-dark.png"
+            className="object-contain select-none pointer-events-none dark:block hidden"
             alt="documents"
           />
         </div>
@@ -16,7 +22,13 @@ const Hero = () => {
           <Image
             fill
             src="/reading.png"
-            className="object-contain select-none pointer-events-none"
+            className="object-contain select-none pointer-events-none dark:hidden"
+            alt="reading"
+          />
+          <Image
+            fill
+            src="/reading-dark.png"
+            className="object-contain select-none pointer-events-none dark:block hidden"
             alt="reading"
           />
         </div>
