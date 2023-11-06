@@ -55,6 +55,25 @@ const Navigation = () => {
     // release to stop resizing
     document.addEventListener("mouseup", handleMouseUp);
   };
+  const resetWidth = () => {
+    if (!sideBarRef.current || !navBarRef.current) return;
+    setIsCollapsed(false);
+    setIsResetting(true);
+
+    // snap the side bar back to initial position
+    sideBarRef.current.style.width = isMobile ? "100%" : "240px";
+    navBarRef.current.style.setProperty(
+      "width",
+      isMobile ? "0" : "calc(100% - 240px)"
+    );
+    navBarRef.current.style.setProperty("left", isMobile ? "100%" : "240px");
+
+    // why this?
+    // notice below the transition with 300 ms when isResetting is true
+    // this is to make sure that the animation is done before the
+    // isResetting is set to true
+    setTimeout(() => setIsResetting(false), 300);
+  };
 
   // render
   return (
@@ -63,7 +82,7 @@ const Navigation = () => {
         ref={sideBarRef}
         className={cn(
           "group/sidebar h-full bg-secondary overflow-y-auto relative flex w-60 flex-col z-[99999]",
-          isResetting && "transition ease-in-out duration-300",
+          isResetting && "transition-all ease-in-out duration-300",
           isMobile && "w-0"
         )}
       >
@@ -91,7 +110,7 @@ const Navigation = () => {
         {/* RESIZE INDICATOR */}
         <div
           onMouseDown={handleMouseDown}
-          onClick={() => {}}
+          onClick={resetWidth}
           className="opacity-0 group-hover/sidebar:hover:opacity-100 transition cursor-ew-resize absolute h-full w-[2.5px] bg-primary/10 right-0 top-0"
         />
       </aside>
