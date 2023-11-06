@@ -51,7 +51,7 @@ const Navbar = () => {
               appearance={{
                 elements: {
                   userButtonAvatarBox:
-                    "w-9 h-9 select-none pointer-events-none",
+                    "w-[38px] h-[38px] select-none pointer-events-none",
                   userPreviewAvatarBox: "select-none pointer-events-none",
                 },
               }}
