@@ -1,4 +1,4 @@
-import { ElementRef, useRef, useState } from "react";
+import { ElementRef, useEffect, useRef, useState } from "react";
 import { ChevronsLeft, MenuIcon } from "lucide-react";
 
 // use this to collapse the sidebar manually when
@@ -13,19 +13,40 @@ import { cn } from "@/lib/utils";
 const Navigation = () => {
   // media
   const isMobile = useMediaQuery("(max-width: 768px)");
+
+  // hooks
+  const pathname = usePathname();
+
   // refs
   const isResizingRef = useRef<boolean | null>(null);
   const sideBarRef = useRef<ElementRef<"aside">>(null);
   const navBarRef = useRef<ElementRef<"div">>(null);
+
   // states
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile); // if it is mobile the sidebar auto collapses
 
+  // effects
+  // THIS IS TO AUTO COLLAPSE THE SIDE BAR IN MOBILE
+  useEffect(() => {
+    if (isMobile) collapse();
+    else resetWidth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMobile]);
+  // THIS IS TO AUTO COLLAPSE THE SIDE BAR WHEN NAVIGATE TO NEW ROUTE
+  useEffect(() => {
+    if (isMobile) collapse();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname, isMobile]);
+
   // methods
   const handleMouseMove = (event: MouseEvent) => {
     if (!isResizingRef.current) return;
+
+    // get the horizontal position of the cursor
     let newWidth = event.clientX;
 
+    // limit the min and max width of the sidebar when drag to resize
     if (newWidth < 240) newWidth = 240;
     if (newWidth >= 480) newWidth = 480;
 
@@ -74,6 +95,17 @@ const Navigation = () => {
     // isResetting is set to true
     setTimeout(() => setIsResetting(false), 300);
   };
+  const collapse = () => {
+    if (!sideBarRef.current || !navBarRef.current) return;
+    setIsCollapsed(true);
+    setIsResetting(true);
+
+    // adjust the width
+    sideBarRef.current.style.width = "0";
+    navBarRef.current.style.setProperty("width", "100%");
+    navBarRef.current.style.setProperty("left", "0");
+    setTimeout(() => setIsResetting(false), 300);
+  };
 
   // render
   return (
@@ -93,6 +125,7 @@ const Navigation = () => {
             "w-7 h-7 text-muted-foreground rounded-sm hover:bg-neutral-200/60 dark:hover:bg-neutral-600 absolute top-2 right-3 opacity-0 group-hover/sidebar:opacity-100 transition",
             isMobile && "opacity-100"
           )}
+          onClick={collapse}
         >
           <ChevronsLeft className="w-7 h-7 text-primary/30 scale-y-110" />
         </div>
@@ -127,7 +160,11 @@ const Navigation = () => {
       >
         <nav className="bg-transparent px-3 py-2 w-full">
           {isCollapsed && (
-            <MenuIcon role="button" className="w-6 h-6 text-muted-foreground" />
+            <MenuIcon
+              onClick={resetWidth}
+              role="button"
+              className="w-6 h-6 text-muted-foreground"
+            />
           )}
         </nav>
       </div>
