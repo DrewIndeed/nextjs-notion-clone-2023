@@ -3,6 +3,7 @@
 import { SignInButton, UserButton } from "@clerk/nextjs";
 import { useConvexAuth } from "convex/react";
 import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
 
 import ModeToggle from "@/components/manual/ModeToggle";
 import Spinner from "@/components/manual/Spinner";
@@ -13,6 +14,7 @@ import Logo from "./Logo";
 
 const Navbar = () => {
   const { isAuthenticated, isLoading } = useConvexAuth();
+  const { user } = useUser();
   const scrolled = useScrollTop();
   return (
     <div
@@ -44,7 +46,10 @@ const Navbar = () => {
               asChild
               className="mr-auto md:mr-0"
             >
-              <Link href="/documents"> Let&lsquo;s Jotivate ✨</Link>
+              <Link href="/documents">
+                {" "}
+                Let&lsquo;s Jotivate, {user?.firstName} ✨
+              </Link>
             </Button>
             <UserButton
               afterSignOutUrl="/"
