@@ -1,5 +1,5 @@
-import { ElementRef, useEffect, useRef, useState } from "react";
 import { ChevronsLeft, MenuIcon } from "lucide-react";
+import { ElementRef, useEffect, useRef, useState } from "react";
 
 // use this to collapse the sidebar manually when
 // an item on the sidebar is clicked
@@ -7,8 +7,10 @@ import { usePathname } from "next/navigation";
 
 // need this to handle the resize of the sidebar
 // not using tailwindcss because it is hard!!!
-import { useMediaQuery } from "usehooks-ts";
 import { cn } from "@/lib/utils";
+import { useMediaQuery } from "usehooks-ts";
+
+import UserItem from "./UserItem";
 
 const Navigation = () => {
   // media
@@ -25,19 +27,6 @@ const Navigation = () => {
   // states
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile); // if it is mobile the sidebar auto collapses
-
-  // effects
-  // THIS IS TO AUTO COLLAPSE THE SIDE BAR IN MOBILE
-  useEffect(() => {
-    if (isMobile) collapse();
-    else resetWidth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMobile]);
-  // THIS IS TO AUTO COLLAPSE THE SIDE BAR WHEN NAVIGATE TO NEW ROUTE
-  useEffect(() => {
-    if (isMobile) collapse();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname, isMobile]);
 
   // methods
   const handleMouseMove = (event: MouseEvent) => {
@@ -107,6 +96,19 @@ const Navigation = () => {
     setTimeout(() => setIsResetting(false), 300);
   };
 
+  // effects
+  // THIS IS TO AUTO COLLAPSE THE SIDE BAR IN MOBILE
+  useEffect(() => {
+    if (isMobile) collapse();
+    else resetWidth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMobile]);
+  // THIS IS TO AUTO COLLAPSE THE SIDE BAR WHEN NAVIGATE TO NEW ROUTE
+  useEffect(() => {
+    if (isMobile) collapse();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname, isMobile]);
+
   // render
   return (
     <>
@@ -125,14 +127,14 @@ const Navigation = () => {
             "w-7 h-7 text-muted-foreground rounded-sm hover:bg-neutral-200/60 dark:hover:bg-neutral-600 absolute top-2 right-3 opacity-0 group-hover/sidebar:opacity-100 transition",
             isMobile && "opacity-100"
           )}
-          onClick={collapse}
+          onClick={() => collapse()}
         >
-          <ChevronsLeft className="w-7 h-7 text-primary/30 scale-y-110" />
+          <ChevronsLeft className="w-7 h-7 text-primary/50 scale-y-110" />
         </div>
 
         {/* ACTION ITEMS */}
         <div>
-          <p>Action Items</p>
+          <UserItem />
         </div>
 
         {/* DOCUMENTS */}
@@ -142,8 +144,8 @@ const Navigation = () => {
 
         {/* RESIZE INDICATOR */}
         <div
-          onMouseDown={handleMouseDown}
-          onClick={resetWidth}
+          onMouseDown={(e) => handleMouseDown(e)}
+          onClick={() => resetWidth()}
           className="opacity-0 group-hover/sidebar:hover:opacity-100 transition cursor-ew-resize absolute h-full w-[2.5px] bg-primary/10 right-0 top-0"
         />
       </aside>
@@ -161,7 +163,7 @@ const Navigation = () => {
         <nav className="bg-transparent px-3 py-2 w-full">
           {isCollapsed && (
             <MenuIcon
-              onClick={resetWidth}
+              onClick={() => resetWidth()}
               role="button"
               className="w-6 h-6 text-muted-foreground"
             />
